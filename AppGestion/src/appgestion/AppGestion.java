@@ -23,6 +23,9 @@ public class AppGestion {
         lista.iniciarSesion("juan@mail.com", "error");
 
         lista.mostrarUsuarios();
+
+
+        System.out.println("Hola Cursor");
     }
 
 }
