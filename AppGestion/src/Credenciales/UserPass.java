@@ -2,12 +2,16 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package MySQL;
+
+package Credenciales;
 
 /**
  *
- * @author ronal
+ * @author Ronaldo Cruz Alvarez
  */
-public class ConexionBD {
+public class UserPass {
+    
+    public static String User = "root";
+    public static String Pass = "****";
     
 }
