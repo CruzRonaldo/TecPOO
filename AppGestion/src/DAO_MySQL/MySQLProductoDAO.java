@@ -3,40 +3,45 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 
-package appgestionDAO.MySQL;
+package DAO_MySQL;
 
-import appgestion.Entidades.Usuario;
-import appgestion.DAO.UsuarioDAO;
+import Entidades.Producto;
+import DAO.ProductoDAO;
 import java.util.List;
 
 /**
  *
  * @author Ronaldo Cruz Alvarez
  */
-public class MySQLUsuarioDAO implements UsuarioDAO {
+public class MySQLProductoDAO implements ProductoDAO{
 
     @Override
-    public void insertar(Usuario a) {
+    public void insertar(Producto a) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    public void modificar(Usuario a) {
+    public void modificar(Producto a) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    public void eliminar(Usuario a) {
+    public void eliminar(Producto a) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    public List<Usuario> obtenerTodos() {
+    public List<Producto> obtenerTodos() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    public Usuario obtener(Long id) {
+    public Producto obtener(Long id) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void cerrarConexion() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 

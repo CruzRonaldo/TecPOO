@@ -2,13 +2,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package appgestion.DAO;
+package DAO;
 
-import appgestion.Entidades.Usuario;
+import Entidades.DetallePedido;
 
 /**
  *
  * @author Ronaldo Cruz Alvarez
  */
-public interface UsuarioDAO extends DAO<Usuario, Long> {
+public interface DetallePedidoDAO extends DAO<DetallePedido, Long> {
 }

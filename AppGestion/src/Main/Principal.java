@@ -2,10 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package appgestion.Main;
+package Main;
 
-import appgestion.view.Inicio;
-import appgestion.MySQL.ConexionBD;
+import MySQL.ConexionBD;
+import Ventanas.PantallaInicio;
 
 /**
  *
@@ -17,12 +17,13 @@ public class Principal {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        System.out.println("Hola Cursor");
 
-        ConexionBD.conectar();
-
-        javax.swing.SwingUtilities.invokeLater(() -> {
-            new Inicio().setVisible(true);
-        });
+        if (ConexionBD.conectar() != null) {
+            javax.swing.SwingUtilities.invokeLater(() -> {
+                new PantallaInicio().setVisible(true);
+            });
+        } else {
+            System.out.println("Error al conectar a la base de datos");
+        }
     }
 }
