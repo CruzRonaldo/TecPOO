@@ -10,16 +10,18 @@ package Entidades;
  */
 public class Producto {
 
-    private int id;
+    private long id;
     private String nombre;
     private double precio;
     private int stock;
+    private String descripcion;
 
-    public Producto(int id, String nombre, double precio, int stock) {
+    public Producto(long id, String nombre, double precio, int stock, String descripcion) {
         this.id = id;
         this.nombre = nombre;
         this.precio = precio;
         this.stock = stock;
+        this.descripcion = descripcion;
     }
 
     public void actualizarStock(int cantidad) {
@@ -31,7 +33,7 @@ public class Producto {
     }
 
     // Getters y setters
-    public int getId() {
+    public long getId() {
         return id;
     }
 
@@ -45,5 +47,9 @@ public class Producto {
 
     public int getStock() {
         return stock;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
     }
 }

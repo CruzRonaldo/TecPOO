@@ -10,7 +10,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
-import MySQL.ConexionBD;
+import Credenciales.ConexionBD;
 import java.util.ArrayList;
 import java.sql.ResultSet;
 
@@ -20,7 +20,7 @@ import java.sql.ResultSet;
  */
 public class MySQLUsuarioDAO implements UsuarioDAO {
 
-    private Connection conexion;
+    private final Connection conexion;
 
     public MySQLUsuarioDAO() {
         this.conexion = ConexionBD.conectar();
@@ -29,11 +29,12 @@ public class MySQLUsuarioDAO implements UsuarioDAO {
     @Override
     public void insertar(Usuario usuario) {
         try {
-            PreparedStatement ps = conexion.prepareStatement("INSERT INTO usuarios (usuario, contrasena, rol) VALUES (?, ?, ?)");
+            PreparedStatement ps = conexion.prepareStatement("INSERT INTO usuarios (nombre_usuario, contraseña, rol) VALUES (?, ?, ?)");
             ps.setString(1, usuario.getUsuario());
-            ps.setString(2, usuario.getContrasena());
+            ps.setString(2, usuario.getContraseña());
             ps.setString(3, usuario.getRol());
             ps.executeUpdate();
+            System.out.println("✅ Usuario insertado.");
         } catch (SQLException e) {
             System.out.println("Error al insertar el usuario: " + e.getMessage());
         }
@@ -42,12 +43,13 @@ public class MySQLUsuarioDAO implements UsuarioDAO {
     @Override
     public void modificar(Usuario usuario) {
         try {
-            PreparedStatement ps = conexion.prepareStatement("UPDATE usuarios SET usuario = ?, contrasena = ?, rol = ? WHERE id = ?");
+            PreparedStatement ps = conexion.prepareStatement("UPDATE usuarios SET nombre_usuario = ?, contrasena = ?, rol = ? WHERE id = ?");
             ps.setString(1, usuario.getUsuario());
-            ps.setString(2, usuario.getContrasena());
+            ps.setString(2, usuario.getContraseña());
             ps.setString(3, usuario.getRol());
             ps.setLong(4, usuario.getId());
             ps.executeUpdate();
+            System.out.println("✅ Usuario modificado.");
         } catch (SQLException e) {
             System.out.println("Error al modificar el usuario: " + e.getMessage());
         }
@@ -59,6 +61,7 @@ public class MySQLUsuarioDAO implements UsuarioDAO {
             PreparedStatement ps = conexion.prepareStatement("DELETE FROM usuarios WHERE id = ?");
             ps.setLong(1, usuario.getId());
             ps.executeUpdate();
+            System.out.println("✅ Usuario eliminado.");
         } catch (SQLException e) {
             System.out.println("Error al eliminar el usuario: " + e.getMessage());
         }
@@ -74,7 +77,7 @@ public class MySQLUsuarioDAO implements UsuarioDAO {
             while (rs.next()) {
                 Usuario u = new Usuario(
                         rs.getLong("id"),
-                        rs.getString("usuario"),
+                        rs.getString("nombre_usuario"),
                         rs.getString("contrasena"),
                         rs.getString("rol")
                 );
@@ -88,11 +91,23 @@ public class MySQLUsuarioDAO implements UsuarioDAO {
 
     @Override
     public Usuario obtener(Long id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        String sql = "SELECT * FROM usuarios WHERE id = ?";
+        try (PreparedStatement ps = conexion.prepareStatement(sql)) {
+            ps.setLong(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return new Usuario(
+                            rs.getLong("id"),
+                            rs.getString("nombre_usuario"),
+                            rs.getString("contrasena"),
+                            rs.getString("rol")
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al obtener el producto: " + e.getMessage());
+        }
+        return null;
     }
 
-    @Override
-    public void cerrarConexion() {
-        ConexionBD.cerrarConexion();
-    }
 }

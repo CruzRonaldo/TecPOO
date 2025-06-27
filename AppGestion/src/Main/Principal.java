@@ -4,8 +4,8 @@
  */
 package Main;
 
-import MySQL.ConexionBD;
-import Ventanas.PantallaInicio;
+import Credenciales.BD_sistema_pedidos;
+import Credenciales.ConexionBD;
 
 /**
  *
@@ -18,12 +18,7 @@ public class Principal {
      */
     public static void main(String[] args) {
 
-        if (ConexionBD.conectar() != null) {
-            javax.swing.SwingUtilities.invokeLater(() -> {
-                new PantallaInicio().setVisible(true);
-            });
-        } else {
-            System.out.println("Error al conectar a la base de datos");
-        }
+        BD_sistema_pedidos.verificarOCrearBD();
+        ConexionBD.cerrarConexion();
     }
 }

@@ -12,18 +12,18 @@ public class Usuario {
 
     private long id;
     private String usuario;
-    private String contrasena;
+    private String contraseña;
     private String rol;
 
-    public Usuario(long id, String usuario, String contrasena, String rol) {
+    public Usuario(long id, String usuario, String contraseña, String rol) {
         this.id = id;
         this.usuario = usuario;
-        this.contrasena = contrasena;
+        this.contraseña = contraseña;
         this.rol = rol;
     }
 
     public boolean login(String usuario, String contrasena) {
-        return this.usuario.equals(usuario) && this.contrasena.equals(contrasena);
+        return this.usuario.equals(usuario) && this.contraseña.equals(contraseña);
     }
 
     public void logout() {
@@ -38,8 +38,8 @@ public class Usuario {
         return usuario;
     }
 
-    public String getContrasena() {
-        return contrasena;
+    public String getContraseña() {
+        return contraseña;
     }
 
     public String getRol() {
@@ -50,8 +50,8 @@ public class Usuario {
         this.usuario = usuario;
     }
 
-    public void setContrasena(String contrasena) {
-        this.contrasena = contrasena;
+    public void setContraseña(String contraseña) {
+        this.contraseña = contraseña;
     }
 
     public void setRol(String rol) {

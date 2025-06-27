@@ -43,4 +43,18 @@ public class DetallePedido {
         return producto;
     }
 
+    // Setters recomendados
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setCantidad(int cantidad) {
+        this.cantidad = cantidad;
+        this.subtotal = calcularSubtotal();
+    }
+
+    public void setProducto(Producto producto) {
+        this.producto = producto;
+        this.subtotal = calcularSubtotal();
+    }
 }

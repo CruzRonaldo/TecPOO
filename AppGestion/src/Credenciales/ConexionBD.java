@@ -2,11 +2,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package MySQL;
+package Credenciales;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+
 
 /**
  *
@@ -14,16 +15,13 @@ import java.sql.SQLException;
  */
 public class ConexionBD {
 
-    static String url = "jdbc:mysql://localhost:3306/sistema_pedidos";
-    static String user = "root";
-    static String pass = "Gestion123";
-
+    static String URL = "jdbc:mysql://localhost:3306/sistema_pedidos";
     private static Connection conexion = null;
 
     public static Connection conectar() {
         try {
             if (conexion == null || conexion.isClosed()) {
-            conexion = DriverManager.getConnection(url, user, pass);
+            conexion = DriverManager.getConnection(URL, UserPass.User, UserPass.Pass);
             System.out.println("✅ Conexión exitosa a MySQL");
             }
         }catch(SQLException e) {

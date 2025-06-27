@@ -23,6 +23,4 @@ public interface DAO<T, K> {
     List<T> obtenerTodos();
 
     T obtener(K id);
-
-    void cerrarConexion();
 }
