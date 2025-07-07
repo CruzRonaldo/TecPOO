@@ -16,18 +16,19 @@ import java.sql.ResultSet;
  */
 public class BD_sistema_pedidos {
 
-    private static final String DB_NAME = "sistema_pedidos";
-
     public static void verificarOCrearBD() {
-        try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/", UserPass.User, UserPass.Pass); Statement stmt = con.createStatement()) {
 
-            ResultSet rs = stmt.executeQuery("SHOW DATABASES LIKE '" + DB_NAME + "'");
+        String URL = "jdbc:mysql://" + UserPass.Host + ":" + UserPass.Puerto + "/";
+        try (Connection con = DriverManager.getConnection(URL, UserPass.User, UserPass.Pass);
+             Statement stmt = con.createStatement()) {
+
+            ResultSet rs = stmt.executeQuery("SHOW DATABASES LIKE '" + UserPass.nombreBaseDatos + "'");
             if (!rs.next()) {
-                System.out.println("⚠️ La base de datos no existe. Creándola...");
+                System.out.println("La base de datos no existe. Creándola...");
 
                 // Crear la base de datos
-                stmt.executeUpdate("CREATE DATABASE " + DB_NAME);
-                stmt.execute("USE " + DB_NAME);
+                stmt.executeUpdate("CREATE DATABASE " + UserPass.nombreBaseDatos);
+                stmt.execute("USE " + UserPass.nombreBaseDatos);
 
                 // Crear tablas
                 stmt.executeUpdate("""

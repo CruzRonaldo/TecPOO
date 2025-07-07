@@ -10,6 +10,9 @@ package Credenciales;
  */
 public class UserPass {
 
+    public static String Host = "localhost";
+    public static String Puerto = "3306";
+    public static String nombreBaseDatos = "gestion_pedidos";
     public static String User = "root";
     public static String Pass = "Gestion123";
 

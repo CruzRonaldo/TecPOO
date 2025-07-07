@@ -8,24 +8,25 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-
 /**
  *
  * @author ronal
  */
 public class ConexionBD {
 
-    static String URL = "jdbc:mysql://localhost:3306/sistema_pedidos";
     private static Connection conexion = null;
 
     public static Connection conectar() {
+        String URL = "jdbc:mysql://" + UserPass.Host + ":" + UserPass.Puerto + "/" + UserPass.nombreBaseDatos;
+//        String URL = "jdbc:mysql://localhost:3306/sistema_pedidos";
+
         try {
             if (conexion == null || conexion.isClosed()) {
-            conexion = DriverManager.getConnection(URL, UserPass.User, UserPass.Pass);
-            System.out.println("✅ Conexión exitosa a MySQL");
+                conexion = DriverManager.getConnection(URL, UserPass.User, UserPass.Pass);
+                System.out.println("Conexión exitosa a MySQL");
             }
-        }catch(SQLException e) {
-            System.out.println("❌ Error al conectar con MySQL: " + e.getMessage());
+        } catch (SQLException e) {
+            System.out.println("Error al conectar con MySQL: " + e.getMessage());
         }
         return conexion;
     }
@@ -35,10 +36,10 @@ public class ConexionBD {
             if (conexion != null && !conexion.isClosed()) {
                 conexion.close();
                 conexion = null;
-                System.out.println("✅ Conexión cerrada correctamente");
+                System.out.println("Conexión cerrada correctamente");
             }
         } catch (SQLException e) {
-            System.out.println("❌ Error al cerrar la conexión: " + e.getMessage());
+            System.out.println("Error al cerrar la conexión: " + e.getMessage());
         }
     }
 }
