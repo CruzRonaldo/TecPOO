@@ -15,18 +15,12 @@ import java.sql.SQLException;
 public class ConexionBD {
 
     private static Connection conexion = null;
+    private static final String URL = "jdbc:mysql://" + UserPass.Host + ":" + UserPass.Puerto + "/" + UserPass.nombreBaseDatos;
 
-    public static Connection conectar() {
-        String URL = "jdbc:mysql://" + UserPass.Host + ":" + UserPass.Puerto + "/" + UserPass.nombreBaseDatos;
-//        String URL = "jdbc:mysql://localhost:3306/sistema_pedidos";
-
-        try {
-            if (conexion == null || conexion.isClosed()) {
-                conexion = DriverManager.getConnection(URL, UserPass.User, UserPass.Pass);
-                System.out.println("Conexión exitosa a MySQL");
-            }
-        } catch (SQLException e) {
-            System.out.println("Error al conectar con MySQL: " + e.getMessage());
+    public static Connection conectar() throws SQLException {
+        if (conexion == null || conexion.isClosed()) {
+            conexion = DriverManager.getConnection(URL, UserPass.User, UserPass.Pass);
+            System.out.println("Conexión exitosa a MySQL");
         }
         return conexion;
     }
