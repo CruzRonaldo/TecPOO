@@ -58,125 +58,124 @@ public class BD_sistema_pedidos {
     }
 
     private static void crearTablas(Statement stmt) throws SQLException {
-        // Tablas principales
         String[] tablas = {
             """
-        CREATE TABLE usuarios (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            nombre_usuario VARCHAR(50) UNIQUE,
-            contraseña VARCHAR(100),
-            email VARCHAR(100),
-            telefono VARCHAR(20),
-            direccion TEXT,
-            rol VARCHAR(20) CHECK (rol IN ('Administrador', 'Vendedor', 'Cliente', 'Repartidor')),
-            puntos INT DEFAULT 0,
-            preferencias TEXT,
-            fecha_registro DATETIME DEFAULT NOW()
-        )
-        """,
+            CREATE TABLE usuarios (
+                usu_id INT AUTO_INCREMENT PRIMARY KEY,
+                usu_nombre_usuario VARCHAR(50) UNIQUE,
+                usu_contraseña VARCHAR(100),
+                usu_email VARCHAR(100),
+                usu_telefono VARCHAR(20),
+                usu_direccion TEXT,
+                usu_rol VARCHAR(20) CHECK (usu_rol IN ('Administrador', 'Vendedor', 'Cliente', 'Repartidor')),
+                usu_puntos INT DEFAULT 0,
+                usu_preferencias TEXT,
+                usu_fecha_registro DATETIME DEFAULT NOW()
+            )
+            """,
             """
-        CREATE TABLE categorias (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            nombre VARCHAR(50) UNIQUE,
-            descripcion TEXT
-        )
-        """,
+            CREATE TABLE categorias (
+                cat_id INT AUTO_INCREMENT PRIMARY KEY,
+                cat_nombre VARCHAR(50) UNIQUE,
+                cat_descripcion TEXT
+            )
+            """,
             """
-        CREATE TABLE productos (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            nombre VARCHAR(100) UNIQUE,
-            precio DECIMAL(10,2),
-            stock INT,
-            stock_minimo INT,
-            descripcion TEXT,
-            id_categoria INT,
-            imagen LONGBLOB,
-            FOREIGN KEY (id_categoria) REFERENCES categorias(id)
-        )
-        """,
+            CREATE TABLE productos (
+                prod_id INT AUTO_INCREMENT PRIMARY KEY,
+                prod_nombre VARCHAR(100) UNIQUE,
+                prod_precio DECIMAL(10,2),
+                prod_stock INT,
+                prod_stock_minimo INT,
+                prod_descripcion TEXT,
+                prod_id_categoria INT,
+                prod_imagen LONGBLOB,
+                FOREIGN KEY (prod_id_categoria) REFERENCES categorias(cat_id)
+            )
+            """,
             """
-        CREATE TABLE metodos_pago (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            nombre VARCHAR(50) UNIQUE,
-            descripcion TEXT
-        )
-        """,
+            CREATE TABLE metodos_pago (
+                mp_id INT AUTO_INCREMENT PRIMARY KEY,
+                mp_nombre VARCHAR(50) UNIQUE,
+                mp_descripcion TEXT
+            )
+            """,
             """
-        CREATE TABLE pedidos (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            codigo_pedido VARCHAR(20) UNIQUE,
-            fecha DATETIME DEFAULT NOW(),
-            estado VARCHAR(50) CHECK (estado IN ('Pendiente', 'Preparación', 'En camino', 'Entregado', 'Cancelado')),
-            id_cliente INT,
-            id_repartidor INT,
-            id_metodo_pago INT,
-            direccion_entrega TEXT,
-            es_urgente BOOLEAN DEFAULT FALSE,
-            motivo_cancelacion TEXT,
-            firma_cliente LONGBLOB,
-            FOREIGN KEY (id_cliente) REFERENCES usuarios(id),
-            FOREIGN KEY (id_repartidor) REFERENCES usuarios(id),
-            FOREIGN KEY (id_metodo_pago) REFERENCES metodos_pago(id)
-        )
-        """,
+            CREATE TABLE pedidos (
+                ped_id INT AUTO_INCREMENT PRIMARY KEY,
+                ped_codigo_pedido VARCHAR(20) UNIQUE,
+                ped_fecha DATETIME DEFAULT NOW(),
+                ped_estado VARCHAR(50) CHECK (ped_estado IN ('Pendiente', 'Preparación', 'En camino', 'Entregado', 'Cancelado')),
+                ped_id_cliente INT,
+                ped_id_repartidor INT,
+                ped_id_metodo_pago INT,
+                ped_direccion_entrega TEXT,
+                ped_es_urgente BOOLEAN DEFAULT FALSE,
+                ped_motivo_cancelacion TEXT,
+                ped_firma_cliente LONGBLOB,
+                FOREIGN KEY (ped_id_cliente) REFERENCES usuarios(usu_id),
+                FOREIGN KEY (ped_id_repartidor) REFERENCES usuarios(usu_id),
+                FOREIGN KEY (ped_id_metodo_pago) REFERENCES metodos_pago(mp_id)
+            )
+            """,
             """
-        CREATE TABLE detalle_pedido (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            id_pedido INT,
-            id_producto INT,
-            cantidad INT,
-            precio_unitario DECIMAL(10,2),
-            subtotal DECIMAL(10,2),
-            FOREIGN KEY (id_pedido) REFERENCES pedidos(id),
-            FOREIGN KEY (id_producto) REFERENCES productos(id)
-        )
-        """,
+            CREATE TABLE detalle_pedido (
+                dp_id INT AUTO_INCREMENT PRIMARY KEY,
+                dp_id_pedido INT,
+                dp_id_producto INT,
+                dp_cantidad INT,
+                dp_precio_unitario DECIMAL(10,2),
+                dp_subtotal DECIMAL(10,2),
+                FOREIGN KEY (dp_id_pedido) REFERENCES pedidos(ped_id),
+                FOREIGN KEY (dp_id_producto) REFERENCES productos(prod_id)
+            )
+            """,
             """
-        CREATE TABLE carrito (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            id_usuario INT,
-            id_producto INT,
-            cantidad INT,
-            fecha_agregado DATETIME DEFAULT NOW(),
-            FOREIGN KEY (id_usuario) REFERENCES usuarios(id),
-            FOREIGN KEY (id_producto) REFERENCES productos(id)
-        )
-        """,
+            CREATE TABLE carrito (
+                car_id INT AUTO_INCREMENT PRIMARY KEY,
+                car_id_usuario INT,
+                car_id_producto INT,
+                car_cantidad INT,
+                car_fecha_agregado DATETIME DEFAULT NOW(),
+                FOREIGN KEY (car_id_usuario) REFERENCES usuarios(usu_id),
+                FOREIGN KEY (car_id_producto) REFERENCES productos(prod_id)
+            )
+            """,
             """
-        CREATE TABLE devoluciones (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            id_pedido INT,
-            id_producto INT,
-            cantidad INT,
-            motivo TEXT,
-            fecha DATETIME DEFAULT NOW(),
-            FOREIGN KEY (id_pedido) REFERENCES pedidos(id),
-            FOREIGN KEY (id_producto) REFERENCES productos(id)
-        )
-        """,
+            CREATE TABLE devoluciones (
+                dev_id INT AUTO_INCREMENT PRIMARY KEY,
+                dev_id_pedido INT,
+                dev_id_producto INT,
+                dev_cantidad INT,
+                dev_motivo TEXT,
+                dev_fecha DATETIME DEFAULT NOW(),
+                FOREIGN KEY (dev_id_pedido) REFERENCES pedidos(ped_id),
+                FOREIGN KEY (dev_id_producto) REFERENCES productos(prod_id)
+            )
+            """,
             """
-        CREATE TABLE historial_pedidos (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            id_pedido INT,
-            estado_anterior VARCHAR(50),
-            estado_nuevo VARCHAR(50),
-            fecha_cambio DATETIME DEFAULT NOW(),
-            id_usuario INT,
-            FOREIGN KEY (id_pedido) REFERENCES pedidos(id),
-            FOREIGN KEY (id_usuario) REFERENCES usuarios(id)
-        )
-        """,
+            CREATE TABLE historial_pedidos (
+                hp_id INT AUTO_INCREMENT PRIMARY KEY,
+                hp_id_pedido INT,
+                hp_estado_anterior VARCHAR(50),
+                hp_estado_nuevo VARCHAR(50),
+                hp_fecha_cambio DATETIME DEFAULT NOW(),
+                hp_id_usuario INT,
+                FOREIGN KEY (hp_id_pedido) REFERENCES pedidos(ped_id),
+                FOREIGN KEY (hp_id_usuario) REFERENCES usuarios(usu_id)
+            )
+            """,
             """
-        CREATE TABLE logs_sistema (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            accion TEXT,
-            tabla_afectada VARCHAR(50),
-            id_registro_afectado INT,
-            id_usuario INT,
-            fecha DATETIME DEFAULT NOW(),
-            FOREIGN KEY (id_usuario) REFERENCES usuarios(id)
-        )
-        """
+            CREATE TABLE logs_sistema (
+                log_id INT AUTO_INCREMENT PRIMARY KEY,
+                log_accion TEXT,
+                log_tabla_afectada VARCHAR(50),
+                log_id_registro_afectado INT,
+                log_id_usuario INT,
+                log_fecha DATETIME DEFAULT NOW(),
+                FOREIGN KEY (log_id_usuario) REFERENCES usuarios(usu_id)
+            )
+            """
         };
 
         for (String tabla : tablas) {
@@ -186,12 +185,12 @@ public class BD_sistema_pedidos {
 
     private static void insertarDatosIniciales(Statement stmt) throws SQLException {
         stmt.executeUpdate("""
-            INSERT INTO usuarios (nombre_usuario, contraseña, email, rol)
+            INSERT INTO usuarios (usu_nombre_usuario, usu_contraseña, usu_email, usu_rol)
             VALUES ('Admin', 'admin123', 'admin@sistema.com', 'Administrador')
         """);
 
         stmt.executeUpdate("""
-            INSERT INTO metodos_pago (nombre, descripcion)
+            INSERT INTO metodos_pago (mp_nombre, mp_descripcion)
             VALUES ('Efectivo', 'Pago en efectivo al momento de la entrega'),
                    ('Tarjeta', 'Pago con tarjeta de crédito/débito'),
                    ('Transferencia', 'Transferencia bancaria')

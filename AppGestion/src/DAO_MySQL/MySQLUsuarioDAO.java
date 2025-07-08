@@ -11,6 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 import Credenciales.ConexionBD;
+import DAO.DAOException;
 import java.util.ArrayList;
 import java.sql.ResultSet;
 
@@ -20,94 +21,166 @@ import java.sql.ResultSet;
  */
 public class MySQLUsuarioDAO implements UsuarioDAO {
 
+    final String INSERT = "INSERT INTO usuarios (usu_nombre_usuario, usu_contraseña, usu_rol) VALUES (?, ?, ?)";
+    final String UPDATE = "UPDATE usuarios SET usu_nombre_usuario = ?, usu_contrasena = ?, usu_rol = ? WHERE usu_id = ?";
+    final String DELETE = "DELETE FROM usuarios WHERE usu_id = ?";
+    final String GETALL = "SELECT usu_id, usu_nombre_usuario, usu_contrasena, usu_rol FROM usuarios";
+    final String GETONE = "SELECT usu_id, usu_nombre_usuario, usu_contrasena, usu_rol FROM usuarios WHERE usu_id = ?";
+
     private final Connection conexion;
 
-    public MySQLUsuarioDAO() {
+    public MySQLUsuarioDAO() throws SQLException {
         this.conexion = ConexionBD.conectar();
     }
 
     @Override
-    public void insertar(Usuario usuario) {
+    public void insertar(Usuario usuario) throws DAOException {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
         try {
-            PreparedStatement ps = conexion.prepareStatement("INSERT INTO usuarios (nombre_usuario, contraseña, rol) VALUES (?, ?, ?)");
+            ps = conexion.prepareStatement(INSERT, PreparedStatement.RETURN_GENERATED_KEYS);
             ps.setString(1, usuario.getUsuario());
             ps.setString(2, usuario.getContraseña());
             ps.setString(3, usuario.getRol());
-            ps.executeUpdate();
-            System.out.println("✅ Usuario insertado.");
-        } catch (SQLException e) {
-            System.out.println("Error al insertar el usuario: " + e.getMessage());
+            if (ps.executeUpdate() == 0) {
+                throw new DAOException("Error al insertar el usuario: no se afectaron filas.");
+            }
+            // Obtener el ID generado automáticamente
+            rs = ps.getGeneratedKeys();
+            if (rs.next()) {
+                long idGenerado = rs.getLong(1);
+                usuario.setId(idGenerado); // Asigna el ID al objeto, si tienes un setter
+                System.out.println("✅ Usuario insertado con ID: " + idGenerado);
+            } else {
+                throw new DAOException("No se pudo obtener el ID generado.");
+            }
+        } catch (SQLException ex) {
+            throw new DAOException("Error al insertar el usuario: ", ex);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException ex) {
+                throw new DAOException("Error cerrando recursos", ex);
+            }
         }
     }
 
     @Override
-    public void modificar(Usuario usuario) {
+    public void modificar(Usuario usuario) throws DAOException {
+        PreparedStatement ps = null;
         try {
-            PreparedStatement ps = conexion.prepareStatement("UPDATE usuarios SET nombre_usuario = ?, contrasena = ?, rol = ? WHERE id = ?");
+            ps = conexion.prepareStatement(UPDATE);
             ps.setString(1, usuario.getUsuario());
             ps.setString(2, usuario.getContraseña());
             ps.setString(3, usuario.getRol());
             ps.setLong(4, usuario.getId());
-            ps.executeUpdate();
-            System.out.println("✅ Usuario modificado.");
-        } catch (SQLException e) {
-            System.out.println("Error al modificar el usuario: " + e.getMessage());
-        }
-    }
 
-    @Override
-    public void eliminar(Usuario usuario) {
-        try {
-            PreparedStatement ps = conexion.prepareStatement("DELETE FROM usuarios WHERE id = ?");
-            ps.setLong(1, usuario.getId());
-            ps.executeUpdate();
-            System.out.println("✅ Usuario eliminado.");
-        } catch (SQLException e) {
-            System.out.println("Error al eliminar el usuario: " + e.getMessage());
-        }
-    }
-
-    @Override
-    public List<Usuario> obtenerTodos() {
-        List<Usuario> lista = new ArrayList<>();
-        String sql = "SELECT * FROM usuarios";
-
-        try (PreparedStatement ps = conexion.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
-
-            while (rs.next()) {
-                Usuario u = new Usuario(
-                        rs.getLong("id"),
-                        rs.getString("nombre_usuario"),
-                        rs.getString("contrasena"),
-                        rs.getString("rol")
-                );
-                lista.add(u);
+            if (ps.executeUpdate() == 0) {
+                throw new DAOException("Error al modificar el usuario: No se afectaron filas.");
             }
-        } catch (SQLException e) {
-            System.out.println("Error al obtener los usuarios: " + e.getMessage());
-        }
-        return lista;
-    }
-
-    @Override
-    public Usuario obtener(Long id) {
-        String sql = "SELECT * FROM usuarios WHERE id = ?";
-        try (PreparedStatement ps = conexion.prepareStatement(sql)) {
-            ps.setLong(1, id);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    return new Usuario(
-                            rs.getLong("id"),
-                            rs.getString("nombre_usuario"),
-                            rs.getString("contrasena"),
-                            rs.getString("rol")
-                    );
+            System.out.println("✅ Usuario modificado.");
+        } catch (SQLException ex) {
+            throw new DAOException("Error al modificar el usuario: ", ex);
+        } finally {
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException ex) {
+                    throw new DAOException("Error en SQL", ex);
                 }
             }
+        }
+    }
+
+    @Override
+    public void eliminar(Usuario usuario) throws DAOException {
+        PreparedStatement ps = null;
+        try {
+            ps = conexion.prepareStatement(DELETE);
+            ps.setLong(1, usuario.getId());
+
+            if (ps.executeUpdate() == 0) {
+                throw new DAOException("Error al eliminar el usuario: No se afectaron filas.");
+            }
+            System.out.println("✅ Usuario eliminado.");
+        } catch (SQLException ex) {
+            throw new DAOException("Error al eliminar el usuario: ", ex);
+        } finally {
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException ex) {
+                    throw new DAOException("Error en SQL", ex);
+                }
+            }
+        }
+    }
+
+    @Override
+    public List<Usuario> obtenerTodos() throws DAOException {
+
+        PreparedStatement ps = null;
+        List<Usuario> usuarios = new ArrayList<>();
+
+        try {
+            ps = conexion.prepareStatement(GETALL);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Usuario usuario = new Usuario(
+                        rs.getLong("usu_id"),
+                        rs.getString("usu_nombre_usuario"),
+                        rs.getString("usu_contrasena"),
+                        rs.getString("usu_rol")
+                );
+                usuarios.add(usuario);
+            }
+        } catch (SQLException ex) {
+            throw new DAOException("Error al eliminar el usuario: ", ex);
+        } finally {
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException ex) {
+                    throw new DAOException("Error en SQL", ex);
+                }
+            }
+        }
+        return usuarios;
+    }
+
+    @Override
+    public Usuario obtener(Long id) throws DAOException {
+        PreparedStatement ps = null;
+        try {
+            ps = conexion.prepareStatement(GETONE);
+            ps.setLong(1, id);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return new Usuario(
+                        rs.getLong("usu_id"),
+                        rs.getString("usu_nombre_usuario"),
+                        rs.getString("usu_contrasena"),
+                        rs.getString("usu_rol")
+                );
+            }
         } catch (SQLException e) {
-            System.out.println("Error al obtener el producto: " + e.getMessage());
+            throw new DAOException("Error al obtener el usuario: ", e);
+        } finally {
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException ex) {
+                    throw new DAOException("Error en SQL", ex);
+                }
+            }
         }
         return null;
     }
-
 }

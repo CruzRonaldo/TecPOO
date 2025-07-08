@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.sql.ResultSet;
 import Credenciales.ConexionBD;
+import DAO.DAOException;
 import java.sql.*;
 
 /**
@@ -24,111 +25,182 @@ public class MySQLPedidosDAO implements PedidoDAO {
 
     private final Connection conexion;
 
-    public MySQLPedidosDAO() {
+    // Sentencias SQL actualizadas
+    final String INSERT = "INSERT INTO pedidos (ped_fecha, ped_estado, ped_id_cliente) VALUES (?, ?, ?)";
+    final String UPDATE = "UPDATE pedidos SET ped_estado = ? WHERE ped_id = ?";
+    final String DELETE = "DELETE FROM pedidos WHERE ped_id = ?";
+    final String GETALL = "SELECT p.*, u.usu_nombre_usuario FROM pedidos p JOIN usuarios u ON p.ped_id_cliente = u.usu_id";
+    final String GETONE = "SELECT p.*, u.usu_nombre_usuario FROM pedidos p JOIN usuarios u ON p.ped_id_cliente = u.usu_id WHERE p.ped_id = ?";
+
+    public MySQLPedidosDAO() throws SQLException {
         this.conexion = ConexionBD.conectar();
     }
 
     @Override
-    public void insertar(Pedido pedido) {
+    public void insertar(Pedido pedido) throws DAOException {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
         try {
-            PreparedStatement ps = conexion.prepareStatement("INSERT INTO pedidos (fecha, estado, id_usuario) VALUES (?, ?, ?)");
-            ps.setTimestamp(1, new Timestamp(pedido.getFecha().getTime()));
+            ps = conexion.prepareStatement(INSERT, PreparedStatement.RETURN_GENERATED_KEYS);
+            ps.setDate(1, new Date(pedido.getFecha().getTime()));
             ps.setString(2, pedido.getEstado());
             ps.setLong(3, pedido.getUsuario().getId());
-            ps.executeUpdate();
 
-            try (ResultSet rs = ps.getGeneratedKeys()) {
-                if (rs.next()) {
-                    pedido.setId(rs.getInt(1));
-                }
+            if (ps.executeUpdate() == 0) {
+                throw new DAOException("❌ No se insertaron filas al registrar el pedido.");
             }
-            System.out.println("✅ Producto insertado.");
+
+            rs = ps.getGeneratedKeys();
+            if (rs.next()) {
+                long idGenerado = rs.getLong(1);
+                pedido.setId(idGenerado);
+                System.out.println("✅ Pedido insertado con ID: " + idGenerado);
+            } else {
+                throw new DAOException("⚠️ No se pudo obtener el ID generado del pedido.");
+            }
         } catch (SQLException e) {
-            System.out.println("Error al insertar el producto: " + e.getMessage());
+            throw new DAOException("Error al insertar el pedido: ", e);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException ex) {
+                throw new DAOException("Error al cerrar recursos SQL en insertar.", ex);
+            }
         }
     }
 
     @Override
-    public void modificar(Pedido pedido) {
+    public void modificar(Pedido pedido) throws DAOException {
+        PreparedStatement ps = null;
         try {
-            PreparedStatement ps = conexion.prepareStatement("UPDATE pedidos SET estado = ? WHERE id = ?");
+            ps = conexion.prepareStatement(UPDATE);
             ps.setString(1, pedido.getEstado());
-            ps.setInt(2, pedido.getId());
-            ps.executeUpdate();
-            System.out.println("✅ Producto modificado.");
+            ps.setLong(2, pedido.getId());
+
+            int filas = ps.executeUpdate();
+            if (filas == 0) {
+                throw new DAOException("Error al modificar el pedido: No se modificaron filas.");
+            }
         } catch (SQLException e) {
-            System.out.println("Error al modificar el producto: " + e.getMessage());
+            throw new DAOException("Error al modificar el pedido: ", e);
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException ex) {
+                throw new DAOException("Error al cerrar recursos SQL en modificar.", ex);
+            }
         }
     }
 
     @Override
-    public void eliminar(Pedido pedido) {
-        String sql = "DELETE FROM pedidos WHERE id = ?";
-        try (PreparedStatement ps = conexion.prepareStatement(sql)) {
-            ps.setInt(1, pedido.getId());
-            ps.executeUpdate();
-            System.out.println("✅ Pedido eliminado.");
+    public void eliminar(Pedido pedido) throws DAOException {
+        PreparedStatement ps = null;
+        try {
+            ps = conexion.prepareStatement(DELETE);
+            ps.setLong(1, pedido.getId());
+
+            int filas = ps.executeUpdate();
+            if (filas == 0) {
+                throw new DAOException("Error al eliminar el pedido: No se eliminaron filas.");
+            }
         } catch (SQLException e) {
-            System.out.println("❌ Error al eliminar el pedido: " + e.getMessage());
+            throw new DAOException("Error al eliminar el pedido: ", e);
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException ex) {
+                throw new DAOException("Error al cerrar recursos SQL en eliminar.", ex);
+            }
         }
     }
 
     @Override
-    public List<Pedido> obtenerTodos() {
+    public List<Pedido> obtenerTodos() throws DAOException {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
         List<Pedido> lista = new ArrayList<>();
-        String sql = "SELECT p.*, u.nombre_usuario FROM pedidos p JOIN usuarios u ON p.id_usuario = u.id";
-
-        try (PreparedStatement ps = conexion.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+        try {
+            ps = conexion.prepareStatement(GETALL);
+            rs = ps.executeQuery();
             while (rs.next()) {
                 Usuario usuario = new Usuario(
-                        rs.getLong("id_usuario"),
-                        rs.getString("nombre_usuario"),
+                        rs.getLong("ped_id_cliente"),
+                        rs.getString("usu_nombre_usuario"),
                         null,
                         ""
                 );
                 Pedido pedido = new Pedido(
-                        rs.getInt("id"),
-                        rs.getTimestamp("fecha"),
-                        rs.getString("estado"),
+                        rs.getInt("ped_id"),
+                        rs.getTimestamp("ped_fecha"),
+                        rs.getString("ped_estado"),
                         usuario,
                         new ArrayList<>()
                 );
                 lista.add(pedido);
             }
         } catch (SQLException e) {
-            System.out.println("Error al obtener pedidos: " + e.getMessage());
+            throw new DAOException("Error al obtener los pedidos: ", e);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException ex) {
+                throw new DAOException("Error al cerrar recursos SQL en obtenerTodos.", ex);
+            }
         }
-
         return lista;
     }
 
     @Override
-    public Pedido obtener(Long id) {
-        String sql = "SELECT p.*, u.nombre_usuario FROM pedidos p JOIN usuarios u ON p.id_usuario = u.id WHERE p.id = ?";
-        try (PreparedStatement ps = conexion.prepareStatement(sql)) {
+    public Pedido obtener(Long id) throws DAOException {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            ps = conexion.prepareStatement(GETONE);
             ps.setLong(1, id);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    Usuario usuario = new Usuario(
-                            rs.getLong("id_usuario"),
-                            rs.getString("nombre_usuario"),
-                            null,
-                            ""
-                    );
-
-                    return new Pedido(
-                            rs.getInt("id"),
-                            rs.getTimestamp("fecha"),
-                            rs.getString("estado"),
-                            usuario,
-                            new ArrayList<>()
-                    );
-                }
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                Usuario usuario = new Usuario(
+                        rs.getLong("ped_id_cliente"),
+                        rs.getString("usu_nombre_usuario"),
+                        null,
+                        ""
+                );
+                return new Pedido(
+                        rs.getInt("ped_id"),
+                        rs.getTimestamp("ped_fecha"),
+                        rs.getString("ped_estado"),
+                        usuario,
+                        new ArrayList<>()
+                );
             }
         } catch (SQLException e) {
-            System.out.println("❌ Error al obtener el pedido: " + e.getMessage());
+            throw new DAOException("Error al obtener el pedido: ", e);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException ex) {
+                throw new DAOException("Error al cerrar recursos SQL en obtener.", ex);
+            }
         }
         return null;
     }
-
 }
