@@ -21,7 +21,7 @@ import java.sql.ResultSet;
  */
 public class MySQLUsuarioDAO implements UsuarioDAO {
 
-    final String INSERT = "INSERT INTO usuarios (usu_nombre_usuario, usu_contraseña,usu_email; usu_rol) VALUES (?, ?, ?, ?)";
+    final String INSERT = "INSERT INTO usuarios (usu_nombre_usuario, usu_contraseña,usu_email, usu_rol) VALUES (?, ?, ?, ?)";
     final String UPDATE = "UPDATE usuarios SET usu_nombre_usuario = ?, usu_contraseña = ?, usu_rol = ? WHERE usu_id = ?";
     final String DELETE = "DELETE FROM usuarios WHERE usu_id = ?";
     final String GETALL = "SELECT usu_id, usu_nombre_usuario, usu_contraseña, usu_rol FROM usuarios";
