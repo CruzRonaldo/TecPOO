@@ -87,6 +87,8 @@ public class Pedido {
     private String estado;
     private Usuario usuario;
     private List<DetallePedido> detalles;
+    
+    
 
     public Pedido(long id, Date fecha, String estado, Usuario usuario, List<DetallePedido> detalles) {
         this.id = id;
@@ -97,21 +99,5 @@ public class Pedido {
     }
 
     public Pedido() {
-    }
-
-    public void agregarDetalle(DetallePedido detalle) {
-        getDetalles().add(detalle);
-    }
-
-    public double calcularTotal() {
-        double total = 0;
-        for (DetallePedido detalle : getDetalles()) {
-            total += detalle.getSubtotal();
-        }
-        return total;
-    }
-
-    public void cambiarEstado(String nuevoEstado) {
-        this.setEstado(nuevoEstado);
     }
 }

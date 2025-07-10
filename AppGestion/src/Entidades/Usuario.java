@@ -4,11 +4,97 @@
  */
 package Entidades;
 
+import java.util.Date;
+
 /**
  *
  * @author Ronaldo Cruz Alvarez
  */
 public class Usuario {
+
+    /**
+     * @return the telefono
+     */
+    public String getTelefono() {
+        return telefono;
+    }
+
+    /**
+     * @param telefono the telefono to set
+     */
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
+    /**
+     * @return the direccion
+     */
+    public String getDireccion() {
+        return direccion;
+    }
+
+    /**
+     * @param direccion the direccion to set
+     */
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
+    }
+
+    /**
+     * @return the puntos
+     */
+    public int getPuntos() {
+        return puntos;
+    }
+
+    /**
+     * @param puntos the puntos to set
+     */
+    public void setPuntos(int puntos) {
+        this.puntos = puntos;
+    }
+
+    /**
+     * @return the preferencias
+     */
+    public String getPreferencias() {
+        return preferencias;
+    }
+
+    /**
+     * @param preferencias the preferencias to set
+     */
+    public void setPreferencias(String preferencias) {
+        this.preferencias = preferencias;
+    }
+
+    /**
+     * @return the fechaRegistro
+     */
+    public java.util.Date getFechaRegistro() {
+        return fechaRegistro;
+    }
+
+    /**
+     * @param fechaRegistro the fechaRegistro to set
+     */
+    public void setFechaRegistro(java.util.Date fechaRegistro) {
+        this.fechaRegistro = fechaRegistro;
+    }
+
+    /**
+     * @return the email
+     */
+    public String getEmail() {
+        return email;
+    }
+
+    /**
+     * @param email the email to set
+     */
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     /**
      * @return the id
@@ -28,14 +114,14 @@ public class Usuario {
      * @return the usuario
      */
     public String getUsuario() {
-        return usuario;
+        return nombreUsuario;
     }
 
     /**
      * @param usuario the usuario to set
      */
     public void setUsuario(String usuario) {
-        this.usuario = usuario;
+        this.nombreUsuario = usuario;
     }
 
     /**
@@ -67,22 +153,49 @@ public class Usuario {
     }
 
     private long id;
-    private String usuario;
+    private String nombreUsuario;
     private String contraseña;
-    private String rol;
+    private String email;
+    private String telefono;
+    private String direccion;
+    private String rol; // 'Administrador', 'Vendedor', 'Cliente', 'Repartidor'
+    private int puntos;
+    private String preferencias;
+    private Date fechaRegistro;
 
-    public Usuario(long id, String usuario, String contraseña, String rol) {
+    public Usuario(long id, String usuario) {
         this.id = id;
-        this.usuario = usuario;
+        this.nombreUsuario = usuario;
+    }
+
+    public Usuario(long id, String nombreUsuario, String contraseña, String email, String rol) {
+        this.id = id;
+        this.nombreUsuario = nombreUsuario;
+        this.contraseña = contraseña;
+        this.email = email;
+        this.rol = rol;
+    }
+
+    public Usuario() {
+    }
+
+    public Usuario(long id, String nombreUsuario, String contraseña, String rol) {
+        this.id = id;
+        this.nombreUsuario = nombreUsuario;
         this.contraseña = contraseña;
         this.rol = rol;
     }
 
-    public boolean login(String usuario, String contrasena) {
-        return this.getUsuario().equals(usuario) && this.getContraseña().equals(getContraseña());
-    }
-
-    public void logout() {
-        System.out.println("Usuario " + getUsuario() + " ha cerrado sesión");
+    public Usuario(long id, String nombreUsuario, String contraseña, String email, String telefono, String direccion, String rol, int puntos, String preferencias, Date fechaRegistro) {
+        this.id = id;
+        this.nombreUsuario = nombreUsuario;
+        this.contraseña = contraseña;
+        this.email = email;
+        this.telefono = telefono;
+        this.direccion = direccion;
+        this.rol = rol;
+        this.puntos = puntos;
+        this.preferencias = preferencias;
+        this.fechaRegistro = fechaRegistro;
     }
 }

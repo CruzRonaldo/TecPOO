@@ -4,60 +4,16 @@
  */
 package Credenciales;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.ResultSet;
-import javax.swing.JOptionPane;
 
 /**
  *
  * @author Ronaldo Cruz Alvarez
  */
-public class BD_sistema_pedidos {
+public class TableManager {
 
-    private static final String URL = "jdbc:mysql://" + UserPass.Host + ":" + UserPass.Puerto + "/";
-
-    public static void verificarOCrearBD() {
-        try {
-            // 1. Verificar/Crear la base de datos
-            if (!existeBaseDatos()) {
-                crearBaseDatosCompleta();
-            } else {
-                System.out.println("La base de datos ya existe.");
-            }
-        } catch (SQLException e) {
-            manejarErrorBD(e);
-        }
-    }
-
-    private static boolean existeBaseDatos() throws SQLException {
-        try (Connection con = DriverManager.getConnection(URL, UserPass.User, UserPass.Pass); Statement stmt = con.createStatement(); ResultSet rs = stmt.executeQuery("SHOW DATABASES LIKE '" + UserPass.nombreBaseDatos + "'")) {
-
-            return rs.next();
-        }
-    }
-
-    private static void crearBaseDatosCompleta() throws SQLException {
-        try (Connection con = DriverManager.getConnection(URL, UserPass.User, UserPass.Pass); Statement stmt = con.createStatement()) {
-
-            System.out.println("La base de datos no existe. Creándola...");
-
-            // Crear la base de datos
-            stmt.executeUpdate("CREATE DATABASE " + UserPass.nombreBaseDatos);
-            stmt.execute("USE " + UserPass.nombreBaseDatos);
-
-            crearTablas(stmt);
-
-            insertarDatosIniciales(stmt);
-
-            System.out.println("Base de datos y tablas creadas correctamente.");
-        }
-
-    }
-
-    private static void crearTablas(Statement stmt) throws SQLException {
+    public static void crearTablas(Statement stmt) throws SQLException {
         String[] tablas = {
             """
             CREATE TABLE usuarios (
@@ -183,25 +139,4 @@ public class BD_sistema_pedidos {
         }
     }
 
-    private static void insertarDatosIniciales(Statement stmt) throws SQLException {
-        stmt.executeUpdate("""
-            INSERT INTO usuarios (usu_nombre_usuario, usu_contraseña, usu_email, usu_rol)
-            VALUES ('Admin', 'admin123', 'admin@sistema.com', 'Administrador')
-        """);
-
-        stmt.executeUpdate("""
-            INSERT INTO metodos_pago (mp_nombre, mp_descripcion)
-            VALUES ('Efectivo', 'Pago en efectivo al momento de la entrega'),
-                   ('Tarjeta', 'Pago con tarjeta de crédito/débito'),
-                   ('Transferencia', 'Transferencia bancaria')
-        """);
-    }
-
-    private static void manejarErrorBD(SQLException e) {
-        System.err.println("❌ Error en la base de datos: " + e.getMessage());
-        JOptionPane.showMessageDialog(null,
-                "Error crítico al inicializar la base de datos:\n" + e.getMessage(),
-                "Error de BD",
-                JOptionPane.ERROR_MESSAGE);
-    }
 }

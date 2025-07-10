@@ -4,6 +4,9 @@
  */
 package Ventanas;
 
+import Credenciales.DatabaseManager;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author ronal
@@ -13,8 +16,14 @@ public class Bienvenida extends javax.swing.JFrame {
     /**
      * Creates new form Bienvenida
      */
+    utils Utils = new utils();
+
+    private boolean mostrarContraseña = false;
+
     public Bienvenida() {
         initComponents();
+
+        Utils.centrarPantalla(this);
     }
 
     /**
@@ -26,11 +35,141 @@ public class Bienvenida extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        txtCorreo = new javax.swing.JTextField();
+        txtContraseña = new javax.swing.JPasswordField();
+        lblViewPass = new javax.swing.JLabel();
+        btnIniciarSesion = new javax.swing.JButton();
+        lblOlvidasteCorreo = new javax.swing.JLabel();
+        lblmensaje1 = new javax.swing.JLabel();
+        lblRegistrarse = new javax.swing.JLabel();
+        lblBienvenida = new javax.swing.JLabel();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        txtCorreo.setText("Ingrese su correo");
+        txtCorreo.setBorder(null);
+        txtCorreo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtCorreoActionPerformed(evt);
+            }
+        });
+        getContentPane().add(txtCorreo, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 330, 270, -1));
+
+        txtContraseña.setText("INGRESE SU CONTRASEÑA");
+        txtContraseña.setBorder(null);
+        getContentPane().add(txtContraseña, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 400, 240, -1));
+
+        lblViewPass.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Figma/ClosePass.png"))); // NOI18N
+        lblViewPass.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lblViewPass.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblViewPassMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                lblViewPassMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                lblViewPassMouseExited(evt);
+            }
+        });
+        getContentPane().add(lblViewPass, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 400, -1, -1));
+
+        btnIniciarSesion.setBackground(new java.awt.Color(0, 0, 0));
+        btnIniciarSesion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Figma/IniciarSesion.png"))); // NOI18N
+        btnIniciarSesion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnIniciarSesionActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnIniciarSesion, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 460, 270, 30));
+
+        lblOlvidasteCorreo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Figma/Contraseña Olvidada.png"))); // NOI18N
+        lblOlvidasteCorreo.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lblOlvidasteCorreo.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblOlvidasteCorreoMouseClicked(evt);
+            }
+        });
+        getContentPane().add(lblOlvidasteCorreo, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 540, -1, -1));
+
+        lblmensaje1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Figma/login.noaccount.png"))); // NOI18N
+        getContentPane().add(lblmensaje1, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 570, -1, -1));
+
+        lblRegistrarse.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Figma/login.Registrase.png"))); // NOI18N
+        lblRegistrarse.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lblRegistrarse.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblRegistrarseMouseClicked(evt);
+            }
+        });
+        getContentPane().add(lblRegistrarse, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 570, -1, -1));
+
+        lblBienvenida.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Figma/LOGIN.png"))); // NOI18N
+        getContentPane().add(lblBienvenida, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void txtCorreoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCorreoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCorreoActionPerformed
+
+    private void lblViewPassMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblViewPassMouseClicked
+        if (mostrarContraseña) {
+            txtContraseña.setEchoChar('*'); // oculta caracteres
+            lblViewPass.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Figma/ClosePass.png")));
+            lblViewPass.setToolTipText("Mostrar contraseña");
+            mostrarContraseña = false;
+        } else {
+            txtContraseña.setEchoChar((char) 0); // muestra caracteres
+            lblViewPass.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Figma/OpenPass.png")));
+            lblViewPass.setToolTipText("Ocultar contraseña");
+            mostrarContraseña = true;
+        }
+    }//GEN-LAST:event_lblViewPassMouseClicked
+
+    private void lblViewPassMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblViewPassMouseEntered
+
+    }//GEN-LAST:event_lblViewPassMouseEntered
+
+    private void lblViewPassMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblViewPassMouseExited
+    }//GEN-LAST:event_lblViewPassMouseExited
+
+    private void btnIniciarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarSesionActionPerformed
+        String correo = txtCorreo.getText().trim();
+        String contraseña = new String(txtContraseña.getPassword()).trim();
+
+        if (correo.isEmpty() || contraseña.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos.", "Campos vacíos", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        if (DatabaseManager.verificarCredenciales(correo, contraseña)) {
+            // Si todo bien, abrimos la siguiente ventana
+            Inicio ventanaInicio = new Inicio();
+            Utils.centrarPantalla(ventanaInicio);
+            ventanaInicio.setVisible(true);
+            this.dispose(); // Cerramos la ventana de bienvenida
+        } else {
+            JOptionPane.showMessageDialog(this, "Correo o contraseña incorrectos.", "Acceso denegado", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnIniciarSesionActionPerformed
+
+    private void lblOlvidasteCorreoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblOlvidasteCorreoMouseClicked
+        recuperarContraseña ventanaRecuperar = new recuperarContraseña();
+
+        Utils.centrarPantalla(ventanaRecuperar);
+        ventanaRecuperar.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_lblOlvidasteCorreoMouseClicked
+
+    private void lblRegistrarseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblRegistrarseMouseClicked
+        Registrar ventanaRegistro = new Registrar();
+        Utils.centrarPantalla(ventanaRegistro);
+        ventanaRegistro.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_lblRegistrarseMouseClicked
 
     /**
      * @param args the command line arguments
@@ -59,6 +198,8 @@ public class Bienvenida extends javax.swing.JFrame {
         }
         //</editor-fold>
 
+        Credenciales.DatabaseManager.verificarOCrearBD();
+
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -68,5 +209,14 @@ public class Bienvenida extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnIniciarSesion;
+    private javax.swing.JLabel lblBienvenida;
+    private javax.swing.JLabel lblOlvidasteCorreo;
+    private javax.swing.JLabel lblRegistrarse;
+    private javax.swing.JLabel lblViewPass;
+    private javax.swing.JLabel lblmensaje1;
+    private javax.swing.JPasswordField txtContraseña;
+    private javax.swing.JTextField txtCorreo;
     // End of variables declaration//GEN-END:variables
+
 }

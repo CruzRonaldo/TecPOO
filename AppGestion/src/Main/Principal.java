@@ -4,7 +4,7 @@
  */
 package Main;
 
-import Credenciales.BD_sistema_pedidos;
+import Credenciales.DatabaseManager;
 import Credenciales.ConexionBD;
 import DAO.DAOException;
 import DAO_MySQL.MySQLUsuarioDAO;
@@ -24,7 +24,7 @@ public class Principal {
 
          try {
             // Verifica y crea la base de datos si no existe
-            BD_sistema_pedidos.verificarOCrearBD();
+            DatabaseManager.verificarOCrearBD();
 
             // Crear instancia del DAO
             MySQLUsuarioDAO usuarioDAO = new MySQLUsuarioDAO();

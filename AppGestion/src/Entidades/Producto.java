@@ -11,6 +11,20 @@ package Entidades;
 public class Producto {
 
     /**
+     * @return the stockMinimo
+     */
+    public int getStockMinimo() {
+        return stockMinimo;
+    }
+
+    /**
+     * @param stockMinimo the stockMinimo to set
+     */
+    public void setStockMinimo(int stockMinimo) {
+        this.stockMinimo = stockMinimo;
+    }
+
+    /**
      * @return the id
      */
     public long getId() {
@@ -115,8 +129,11 @@ public class Producto {
     private String nombre;
     private double precio;
     private int stock;
+    private int stockMinimo;
     private String descripcion;
     private Categoria categoria;
+    
+    
 
     public Producto() {
     }

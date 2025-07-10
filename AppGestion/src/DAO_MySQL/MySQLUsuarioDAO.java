@@ -21,11 +21,11 @@ import java.sql.ResultSet;
  */
 public class MySQLUsuarioDAO implements UsuarioDAO {
 
-    final String INSERT = "INSERT INTO usuarios (usu_nombre_usuario, usu_contraseña, usu_rol) VALUES (?, ?, ?)";
-    final String UPDATE = "UPDATE usuarios SET usu_nombre_usuario = ?, usu_contrasena = ?, usu_rol = ? WHERE usu_id = ?";
+    final String INSERT = "INSERT INTO usuarios (usu_nombre_usuario, usu_contraseña,usu_email; usu_rol) VALUES (?, ?, ?, ?)";
+    final String UPDATE = "UPDATE usuarios SET usu_nombre_usuario = ?, usu_contraseña = ?, usu_rol = ? WHERE usu_id = ?";
     final String DELETE = "DELETE FROM usuarios WHERE usu_id = ?";
-    final String GETALL = "SELECT usu_id, usu_nombre_usuario, usu_contrasena, usu_rol FROM usuarios";
-    final String GETONE = "SELECT usu_id, usu_nombre_usuario, usu_contrasena, usu_rol FROM usuarios WHERE usu_id = ?";
+    final String GETALL = "SELECT usu_id, usu_nombre_usuario, usu_contraseña, usu_rol FROM usuarios";
+    final String GETONE = "SELECT usu_id, usu_nombre_usuario, usu_contraseña, usu_rol FROM usuarios WHERE usu_id = ?";
 
     private final Connection conexion;
 
@@ -41,7 +41,8 @@ public class MySQLUsuarioDAO implements UsuarioDAO {
             ps = conexion.prepareStatement(INSERT, PreparedStatement.RETURN_GENERATED_KEYS);
             ps.setString(1, usuario.getUsuario());
             ps.setString(2, usuario.getContraseña());
-            ps.setString(3, usuario.getRol());
+            ps.setString(3, usuario.getEmail());
+            ps.setString(4, usuario.getRol());
             if (ps.executeUpdate() == 0) {
                 throw new DAOException("Error al insertar el usuario: no se afectaron filas.");
             }
@@ -77,8 +78,9 @@ public class MySQLUsuarioDAO implements UsuarioDAO {
             ps = conexion.prepareStatement(UPDATE);
             ps.setString(1, usuario.getUsuario());
             ps.setString(2, usuario.getContraseña());
-            ps.setString(3, usuario.getRol());
-            ps.setLong(4, usuario.getId());
+            ps.setString(3, usuario.getEmail());
+            ps.setString(4, usuario.getRol());
+            ps.setLong(5, usuario.getId());
 
             if (ps.executeUpdate() == 0) {
                 throw new DAOException("Error al modificar el usuario: No se afectaron filas.");
@@ -135,7 +137,8 @@ public class MySQLUsuarioDAO implements UsuarioDAO {
                 Usuario usuario = new Usuario(
                         rs.getLong("usu_id"),
                         rs.getString("usu_nombre_usuario"),
-                        rs.getString("usu_contrasena"),
+                        rs.getString("usu_contraseña"),
+                        rs.getString("usu_email"),
                         rs.getString("usu_rol")
                 );
                 usuarios.add(usuario);
@@ -166,7 +169,8 @@ public class MySQLUsuarioDAO implements UsuarioDAO {
                 return new Usuario(
                         rs.getLong("usu_id"),
                         rs.getString("usu_nombre_usuario"),
-                        rs.getString("usu_contrasena"),
+                        rs.getString("usu_contraseña"),
+                        rs.getString("usu_email"),
                         rs.getString("usu_rol")
                 );
             }
