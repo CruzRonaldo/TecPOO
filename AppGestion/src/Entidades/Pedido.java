@@ -13,6 +13,20 @@ import java.util.*;
 public class Pedido {
 
     /**
+     * @return the NombreUsuario
+     */
+    public Usuario getNombreUsuario() {
+        return NombreUsuario;
+    }
+
+    /**
+     * @param NombreUsuario the NombreUsuario to set
+     */
+    public void setNombreUsuario(Usuario NombreUsuario) {
+        this.NombreUsuario = NombreUsuario;
+    }
+
+    /**
      * @return the id
      */
     public long getId() {
@@ -54,19 +68,7 @@ public class Pedido {
         this.estado = estado;
     }
 
-    /**
-     * @return the usuario
-     */
-    public Usuario getUsuario() {
-        return usuario;
-    }
-
-    /**
-     * @param usuario the usuario to set
-     */
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
-    }
+    
 
     /**
      * @return the detalles
@@ -85,16 +87,16 @@ public class Pedido {
     private long id;
     private Date fecha;
     private String estado;
-    private Usuario usuario;
+    private Usuario NombreUsuario;
     private List<DetallePedido> detalles;
     
     
 
-    public Pedido(long id, Date fecha, String estado, Usuario usuario, List<DetallePedido> detalles) {
+    public Pedido(long id, Date fecha, String estado, Usuario NombreUsuario, List<DetallePedido> detalles) {
         this.id = id;
         this.fecha = fecha;
         this.estado = estado;
-        this.usuario = usuario;
+        this.NombreUsuario = NombreUsuario;
         this.detalles = detalles;
     }
 

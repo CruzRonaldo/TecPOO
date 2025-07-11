@@ -39,7 +39,7 @@ public class MySQLUsuarioDAO implements UsuarioDAO {
         ResultSet rs = null;
         try {
             ps = conexion.prepareStatement(INSERT, PreparedStatement.RETURN_GENERATED_KEYS);
-            ps.setString(1, usuario.getUsuario());
+            ps.setString(1, usuario.getNombreUsuario());
             ps.setString(2, usuario.getContraseña());
             ps.setString(3, usuario.getEmail());
             ps.setString(4, usuario.getRol());
@@ -76,7 +76,7 @@ public class MySQLUsuarioDAO implements UsuarioDAO {
         PreparedStatement ps = null;
         try {
             ps = conexion.prepareStatement(UPDATE);
-            ps.setString(1, usuario.getUsuario());
+            ps.setString(1, usuario.getNombreUsuario());
             ps.setString(2, usuario.getContraseña());
             ps.setString(3, usuario.getEmail());
             ps.setString(4, usuario.getRol());
@@ -158,7 +158,7 @@ public class MySQLUsuarioDAO implements UsuarioDAO {
     }
 
     @Override
-    public Usuario obtener(Long id) throws DAOException {
+    public Usuario obtenerPorID(Long id) throws DAOException {
         PreparedStatement ps = null;
         try {
             ps = conexion.prepareStatement(GETONE);
@@ -186,5 +186,38 @@ public class MySQLUsuarioDAO implements UsuarioDAO {
             }
         }
         return null;
+    }
+
+    @Override
+    public Usuario ObtenerPorCorreo(String correo) throws DAOException {
+        String sql = "SELECT * FROM usuarios WHERE usu_email = ?";
+        try (PreparedStatement ps = conexion.prepareStatement(sql)) {
+            ps.setString(1, correo);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return new Usuario(
+                        rs.getLong("usu_id"),
+                        rs.getString("usu_nombre_usuario"),
+                        rs.getString("usu_contraseña"),
+                        rs.getString("usu_email"),
+                        rs.getString("usu_rol")
+                );
+            }
+        } catch (SQLException ex) {
+            throw new DAOException("Error al buscar usuario por correo", ex);
+        }
+        return null;
+    }
+
+    @Override
+    public void actualizar(Usuario usuario) throws DAOException {
+        String sql = "UPDATE usuarios SET usu_contraseña = ? WHERE usu_id = ?";
+        try (PreparedStatement ps = conexion.prepareStatement(sql)) {
+            ps.setString(1, usuario.getContraseña());
+            ps.setLong(2, usuario.getId());
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            throw new DAOException("Error al actualizar la contraseña", ex);
+        }
     }
 }

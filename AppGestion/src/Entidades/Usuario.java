@@ -13,6 +13,63 @@ import java.util.Date;
 public class Usuario {
 
     /**
+     * @return the nombreUsuario
+     */
+    public String getNombreUsuario() {
+        return nombreUsuario;
+    }
+
+    /**
+     * @param nombreUsuario the nombreUsuario to set
+     */
+    public void setNombreUsuario(String nombreUsuario) {
+        this.nombreUsuario = nombreUsuario;
+    }
+
+    /**
+     * @return the id
+     */
+    public long getId() {
+        return id;
+    }
+
+    /**
+     * @param id the id to set
+     */
+    public void setId(long id) {
+        this.id = id;
+    }
+
+
+    /**
+     * @return the contraseña
+     */
+    public String getContraseña() {
+        return contraseña;
+    }
+
+    /**
+     * @param contraseña the contraseña to set
+     */
+    public void setContraseña(String contraseña) {
+        this.contraseña = contraseña;
+    }
+
+    /**
+     * @return the email
+     */
+    public String getEmail() {
+        return email;
+    }
+
+    /**
+     * @param email the email to set
+     */
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    /**
      * @return the telefono
      */
     public String getTelefono() {
@@ -38,6 +95,20 @@ public class Usuario {
      */
     public void setDireccion(String direccion) {
         this.direccion = direccion;
+    }
+
+    /**
+     * @return the rol
+     */
+    public String getRol() {
+        return rol;
+    }
+
+    /**
+     * @param rol the rol to set
+     */
+    public void setRol(String rol) {
+        this.rol = rol;
     }
 
     /**
@@ -71,86 +142,17 @@ public class Usuario {
     /**
      * @return the fechaRegistro
      */
-    public java.util.Date getFechaRegistro() {
+    public Date getFechaRegistro() {
         return fechaRegistro;
     }
 
     /**
      * @param fechaRegistro the fechaRegistro to set
      */
-    public void setFechaRegistro(java.util.Date fechaRegistro) {
+    public void setFechaRegistro(Date fechaRegistro) {
         this.fechaRegistro = fechaRegistro;
     }
 
-    /**
-     * @return the email
-     */
-    public String getEmail() {
-        return email;
-    }
-
-    /**
-     * @param email the email to set
-     */
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    /**
-     * @return the id
-     */
-    public long getId() {
-        return id;
-    }
-
-    /**
-     * @param id the id to set
-     */
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    /**
-     * @return the usuario
-     */
-    public String getUsuario() {
-        return nombreUsuario;
-    }
-
-    /**
-     * @param usuario the usuario to set
-     */
-    public void setUsuario(String usuario) {
-        this.nombreUsuario = usuario;
-    }
-
-    /**
-     * @return the contraseña
-     */
-    public String getContraseña() {
-        return contraseña;
-    }
-
-    /**
-     * @param contraseña the contraseña to set
-     */
-    public void setContraseña(String contraseña) {
-        this.contraseña = contraseña;
-    }
-
-    /**
-     * @return the rol
-     */
-    public String getRol() {
-        return rol;
-    }
-
-    /**
-     * @param rol the rol to set
-     */
-    public void setRol(String rol) {
-        this.rol = rol;
-    }
 
     private long id;
     private String nombreUsuario;
@@ -163,9 +165,9 @@ public class Usuario {
     private String preferencias;
     private Date fechaRegistro;
 
-    public Usuario(long id, String usuario) {
+    public Usuario(long id, String nombreUsuario) {
         this.id = id;
-        this.nombreUsuario = usuario;
+        this.nombreUsuario = nombreUsuario;
     }
 
     public Usuario(long id, String nombreUsuario, String contraseña, String email, String rol) {

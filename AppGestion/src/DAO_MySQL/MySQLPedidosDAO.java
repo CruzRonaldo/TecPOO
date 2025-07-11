@@ -44,7 +44,7 @@ public class MySQLPedidosDAO implements PedidoDAO {
             ps = conexion.prepareStatement(INSERT, PreparedStatement.RETURN_GENERATED_KEYS);
             ps.setDate(1, new Date(pedido.getFecha().getTime()));
             ps.setString(2, pedido.getEstado());
-            ps.setLong(3, pedido.getUsuario().getId());
+            ps.setLong(3, pedido.getNombreUsuario().getId());
 
             if (ps.executeUpdate() == 0) {
                 throw new DAOException("❌ No se insertaron filas al registrar el pedido.");
@@ -165,7 +165,7 @@ public class MySQLPedidosDAO implements PedidoDAO {
     }
 
     @Override
-    public Pedido obtener(Long id) throws DAOException {
+    public Pedido obtenerPorID(Long id) throws DAOException {
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {

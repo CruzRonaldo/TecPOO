@@ -171,7 +171,7 @@ public class MySQLDetallePedidosDAO implements DetallePedidoDAO {
     }
 
     @Override
-    public DetallePedido obtener(Long id) throws DAOException {
+    public DetallePedido obtenerPorID(Long id) throws DAOException {
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {

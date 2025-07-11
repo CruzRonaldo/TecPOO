@@ -86,11 +86,11 @@ public class Registrar extends javax.swing.JFrame {
                 txtConfirmarContraseñaActionPerformed(evt);
             }
         });
-        getContentPane().add(txtConfirmarContraseña, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 470, 240, 30));
+        getContentPane().add(txtConfirmarContraseña, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 470, 240, 20));
 
         txtContraseña.setText("INGRESE SU CONTRASEÑA");
         txtContraseña.setBorder(null);
-        getContentPane().add(txtContraseña, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 390, 240, 40));
+        getContentPane().add(txtContraseña, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 400, 240, 20));
 
         btnRegistrarseYa.setBackground(new java.awt.Color(60, 9, 108));
         btnRegistrarseYa.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Figma/RegistrarseYa.png"))); // NOI18N
@@ -101,7 +101,7 @@ public class Registrar extends javax.swing.JFrame {
                 btnRegistrarseYaActionPerformed(evt);
             }
         });
-        getContentPane().add(btnRegistrarseYa, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 540, -1, -1));
+        getContentPane().add(btnRegistrarseYa, new org.netbeans.lib.awtextra.AbsoluteConstraints(34, 543, 310, 40));
 
         lblMensaje1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Figma/registrar.yesaccount.png"))); // NOI18N
         getContentPane().add(lblMensaje1, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 610, -1, -1));
@@ -114,6 +114,7 @@ public class Registrar extends javax.swing.JFrame {
         });
         getContentPane().add(lblAcceso, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 610, -1, -1));
 
+        txtNombreUsuario.setText("Ingrese un nombre");
         txtNombreUsuario.setBorder(null);
         txtNombreUsuario.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
         txtNombreUsuario.addActionListener(new java.awt.event.ActionListener() {
@@ -121,11 +122,17 @@ public class Registrar extends javax.swing.JFrame {
                 txtNombreUsuarioActionPerformed(evt);
             }
         });
-        getContentPane().add(txtNombreUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 252, 280, 40));
+        getContentPane().add(txtNombreUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 262, 280, 20));
 
+        txtCorreo.setText("Ingrese su email");
         txtCorreo.setBorder(null);
         txtCorreo.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
-        getContentPane().add(txtCorreo, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 322, 280, 40));
+        txtCorreo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtCorreoActionPerformed(evt);
+            }
+        });
+        getContentPane().add(txtCorreo, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 332, 280, 20));
 
         lblRegistro.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Figma/REGISTRO.png"))); // NOI18N
         getContentPane().add(lblRegistro, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
@@ -157,12 +164,10 @@ public class Registrar extends javax.swing.JFrame {
         if (mostrarContraseña) {
             txtContraseña.setEchoChar('*'); // oculta caracteres
             lblViewPass.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Figma/ClosePass.png")));
-            lblViewPass.setToolTipText("Mostrar contraseña");
             mostrarContraseña = false;
         } else {
             txtContraseña.setEchoChar((char) 0); // muestra caracteres
             lblViewPass.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Figma/OpenPass.png")));
-            lblViewPass.setToolTipText("Ocultar contraseña");
             mostrarContraseña = true;
         }
     }//GEN-LAST:event_lblViewPassMouseClicked
@@ -202,7 +207,7 @@ public class Registrar extends javax.swing.JFrame {
 
         try {
             Usuario nuevo = new Usuario();
-            nuevo.setUsuario(nombreUsuario);
+            nuevo.setNombreUsuario(nombreUsuario);
             nuevo.setContraseña(pass);
             nuevo.setEmail(correo);
             nuevo.setRol("Cliente");
@@ -223,6 +228,10 @@ public class Registrar extends javax.swing.JFrame {
     private void txtNombreUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreUsuarioActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtNombreUsuarioActionPerformed
+
+    private void txtCorreoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCorreoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCorreoActionPerformed
 
     /**
      * @param args the command line arguments

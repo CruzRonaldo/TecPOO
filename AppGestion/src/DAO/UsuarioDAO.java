@@ -11,4 +11,8 @@ import Entidades.Usuario;
  * @author Ronaldo Cruz Alvarez
  */
 public interface UsuarioDAO extends DAO<Usuario, Long> {
+    
+    public Usuario ObtenerPorCorreo(String correo) throws DAOException;
+    
+    public void actualizar(Usuario usuario) throws DAOException;
 }

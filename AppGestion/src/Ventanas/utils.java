@@ -13,8 +13,9 @@ import javax.swing.JFrame;
 public class utils {
 
     public void centrarPantalla(JFrame pantalla) {
+        pantalla.setVisible(true);
         pantalla.setResizable(false);
         pantalla.setLocationRelativeTo(null);
     }
-
+   
 }

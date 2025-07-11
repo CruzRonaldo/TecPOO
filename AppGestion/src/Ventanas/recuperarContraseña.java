@@ -4,6 +4,13 @@
  */
 package Ventanas;
 
+import DAO.DAOException;
+import DAO.UsuarioDAO;
+import DAO_MySQL.MySQLUsuarioDAO;
+import Entidades.Usuario;
+import javax.swing.JOptionPane;
+import java.sql.SQLException;
+
 /**
  *
  * @author ronal
@@ -13,6 +20,8 @@ public class recuperarContraseña extends javax.swing.JFrame {
     /**
      * Creates new form recuperarContraseña
      */
+    utils utils = new utils();
+    
     public recuperarContraseña() {
         initComponents();
     }
@@ -26,16 +35,81 @@ public class recuperarContraseña extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        txtCorreo = new javax.swing.JTextField();
+        btnRecovery = new javax.swing.JButton();
+        lblMensaje1 = new javax.swing.JLabel();
+        btnIniciarSesion = new javax.swing.JLabel();
         lblRecoveryPass = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        lblRecoveryPass.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Figma/RECUPERAR CONTRASEÑA.png"))); // NOI18N
+        txtCorreo.setBorder(null);
+        txtCorreo.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        txtCorreo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtCorreoActionPerformed(evt);
+            }
+        });
+        getContentPane().add(txtCorreo, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 360, 270, 30));
+
+        btnRecovery.setBackground(new java.awt.Color(60, 9, 108));
+        btnRecovery.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Figma/EnviarEnlaceRecuperacion.png"))); // NOI18N
+        btnRecovery.setBorder(null);
+        btnRecovery.setContentAreaFilled(false);
+        btnRecovery.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnRecovery.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRecoveryActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnRecovery, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 420, -1, 50));
+
+        lblMensaje1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Figma/recovery.savePass.png"))); // NOI18N
+        getContentPane().add(lblMensaje1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 580, -1, 30));
+
+        btnIniciarSesion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Figma/recovery.IniciarSesión.png"))); // NOI18N
+        btnIniciarSesion.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnIniciarSesionMouseClicked(evt);
+            }
+        });
+        getContentPane().add(btnIniciarSesion, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 580, 90, 30));
+
+        lblRecoveryPass.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Figma/RECUPERAR CONTRASEÑA1.png"))); // NOI18N
         getContentPane().add(lblRecoveryPass, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnIniciarSesionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnIniciarSesionMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnIniciarSesionMouseClicked
+
+    private void txtCorreoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCorreoActionPerformed
+    }//GEN-LAST:event_txtCorreoActionPerformed
+
+    private void btnRecoveryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRecoveryActionPerformed
+        String correo = txtCorreo.getText();
+        if (correo.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Ingrese el correo");
+        }
+        try {
+            UsuarioDAO usuariodao = new MySQLUsuarioDAO();
+            Usuario usuario = usuariodao.ObtenerPorCorreo(correo); 
+
+            if (usuario != null) {
+                cambiarContraseña CAMBIO = new cambiarContraseña(usuario);
+                utils.centrarPantalla(CAMBIO);
+                this.dispose();
+            } else {
+                JOptionPane.showMessageDialog(this, "No se encontró una cuenta con ese correo.");
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Error al buscar el correo:\n" + e.getMessage());
+        } catch (DAOException ex) {
+        }
+    }//GEN-LAST:event_btnRecoveryActionPerformed
 
     /**
      * @param args the command line arguments
@@ -73,6 +147,10 @@ public class recuperarContraseña extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel btnIniciarSesion;
+    private javax.swing.JButton btnRecovery;
+    private javax.swing.JLabel lblMensaje1;
     private javax.swing.JLabel lblRecoveryPass;
+    private javax.swing.JTextField txtCorreo;
     // End of variables declaration//GEN-END:variables
 }

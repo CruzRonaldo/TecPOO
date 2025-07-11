@@ -119,12 +119,10 @@ public class Bienvenida extends javax.swing.JFrame {
         if (mostrarContraseña) {
             txtContraseña.setEchoChar('*'); // oculta caracteres
             lblViewPass.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Figma/ClosePass.png")));
-            lblViewPass.setToolTipText("Mostrar contraseña");
             mostrarContraseña = false;
         } else {
             txtContraseña.setEchoChar((char) 0); // muestra caracteres
             lblViewPass.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Figma/OpenPass.png")));
-            lblViewPass.setToolTipText("Ocultar contraseña");
             mostrarContraseña = true;
         }
     }//GEN-LAST:event_lblViewPassMouseClicked
@@ -146,11 +144,11 @@ public class Bienvenida extends javax.swing.JFrame {
         }
 
         if (DatabaseManager.verificarCredenciales(correo, contraseña)) {
-            // Si todo bien, abrimos la siguiente ventana
             Inicio ventanaInicio = new Inicio();
-            Utils.centrarPantalla(ventanaInicio);
+
             ventanaInicio.setVisible(true);
-            this.dispose(); // Cerramos la ventana de bienvenida
+            Utils.centrarPantalla(ventanaInicio);
+            this.dispose();
         } else {
             JOptionPane.showMessageDialog(this, "Correo o contraseña incorrectos.", "Acceso denegado", JOptionPane.ERROR_MESSAGE);
         }
@@ -159,15 +157,16 @@ public class Bienvenida extends javax.swing.JFrame {
     private void lblOlvidasteCorreoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblOlvidasteCorreoMouseClicked
         recuperarContraseña ventanaRecuperar = new recuperarContraseña();
 
-        Utils.centrarPantalla(ventanaRecuperar);
         ventanaRecuperar.setVisible(true);
+        Utils.centrarPantalla(ventanaRecuperar);
         this.dispose();
     }//GEN-LAST:event_lblOlvidasteCorreoMouseClicked
 
     private void lblRegistrarseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblRegistrarseMouseClicked
         Registrar ventanaRegistro = new Registrar();
-        Utils.centrarPantalla(ventanaRegistro);
+        
         ventanaRegistro.setVisible(true);
+        Utils.centrarPantalla(ventanaRegistro);
         this.dispose();
     }//GEN-LAST:event_lblRegistrarseMouseClicked
 

@@ -141,7 +141,7 @@ public class MySQLProductoDAO implements ProductoDAO {
     }
 
     @Override
-    public Producto obtener(Long id) throws DAOException {
+    public Producto obtenerPorID(Long id) throws DAOException {
         try (PreparedStatement ps = conexion.prepareStatement(GETONE)) {
             ps.setLong(1, id);
             try (ResultSet rs = ps.executeQuery()) {
